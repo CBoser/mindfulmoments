@@ -5,47 +5,415 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MindfulMoments - Adaptive Micro-Activity Guide</title>
   <style>
-    /* Minimal refactor of original styling; still clean and friendly */
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Segoe UI',system-ui,-apple-system; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-    .container{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-radius:18px;padding:2rem;max-width:550px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.08);}
-    .app-title{font-size:2.3rem;text-align:center;margin-bottom:.25rem;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .app-subtitle{font-size:.9rem;text-align:center;color:#555;margin-bottom:1rem;font-style:italic;}
-    .user-stats{background:linear-gradient(135deg,#667eea15,#764ba215);border-radius:10px;padding:1rem;margin-bottom:1.25rem;text-align:center;border:1px solid rgba(102,126,234,.18);}
-    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem;}
-    .stat-item{text-align:center;}
-    .stat-number{font-size:1.4rem;font-weight:700;color:#5f4bb6;}
-    .stat-label{font-size:.7rem;color:#444;margin-top:2px;}
-    .quick-start-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:1rem 0;}
-    .quick-start-btn{padding:12px;border:2px solid #e1e5e9;border-radius:8px;background:#fff;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px;font-size:.9rem;font-weight:600;}
-    .quick-start-btn:hover{border-color:#5648c8;background:rgba(102,126,234,.08);transform:translateY(-1px);}
-    .form-group{margin-bottom:1.25rem;}
-    label{display:block;margin-bottom:6px;color:#444;font-weight:600;font-size:.85rem;}
-    select,input,textarea{width:100%;padding:12px;border:2px solid #e1e5e9;border-radius:10px;font-size:1rem;transition:all .2s;border-radius:8px;background:#fff;}
-    select:focus,input:focus,textarea:focus{outline:none;border-color:#6f55d4;box-shadow:0 0 0 4px rgba(102,126,234,.1);}
-    button{width:100%;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:600;cursor:pointer;transition:all .25s;}
-    button:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(102,126,234,.25);}
-    .secondary-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:12px;cursor:pointer;}
-    .progress-bar{width:100%;height:8px;background:#e1e5e9;border-radius:4px;overflow:hidden;margin:1rem 0;}
-    .progress-fill{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);width:0%;transition:width .3s;}
-    .step{background:#f1f3f7;border-left:4px solid #667eea;padding:1rem;margin:1rem 0;border-radius:6px;display:none;}
-    .step.active{display:block;}
-    .timer{text-align:center;font-size:2rem;font-weight:700;color:#5f4bb6;margin:1rem 0;}
-    .choices{display:grid;gap:10px;margin:1rem 0;}
-    .choice-btn{padding:10px;background:#fff;border:2px solid #e1e5e9;border-radius:8px;cursor:pointer;transition:all .2s;text-align:left;}
-    .choice-btn:hover{border-color:#6f55d4;background:rgba(102,126,234,.08);}
-    .audio-controls{background:#f8f9fa;border-radius:10px;border:2px solid #e1e5e9;padding:1rem;margin:1rem 0;}
-    .audio-toggle{background:#28a745;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;margin:5px;font-size:.8rem;}
-    .audio-toggle.disable{background:#dc3545;}
-    .volume-slider{width:150px;margin:0 10px;}
-    .speaking-indicator{display:none;text-align:center;color:#5f4bb6;font-style:italic;margin:10px 0;}
-    .feedback-section{background:#f8f9fa;border-radius:10px;padding:1.5rem;margin:1rem 0;border:2px solid #e1e5e9;}
-    .rating-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0;}
-    .rating-btn{padding:8px 14px;border:2px solid #e1e5e9;border-radius:20px;background:#fff;cursor:pointer;transition:all .2s;font-size:.8rem;}
-    .rating-btn.selected{border-color:#6f55d4;background:rgba(102,126,234,.1);}
-    .intro-text{color:#555;line-height:1.5;margin-bottom:1rem;}
-    .donation-link{text-align:center;margin-top:1rem;padding:1rem;background:rgba(255,255,255,.75);border-radius:10px;border:1px solid #e1e5e9;font-size:.9rem;}
-    .donation-link a{color:#5f4bb6;font-weight:600;text-decoration:none;}
+    /* Enhanced styling with better responsiveness and accessibility */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 18px;
+      padding: 2rem;
+      max-width: 550px;
+      width: 100%;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .app-title {
+      font-size: 2.3rem;
+      text-align: center;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+    
+    .app-subtitle {
+      font-size: 0.9rem;
+      text-align: center;
+      color: #555;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    
+    .user-stats {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      text-align: center;
+      border: 1px solid rgba(102, 126, 234, 0.18);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #5f4bb6;
+    }
+    
+    .stat-label {
+      font-size: 0.7rem;
+      color: #444;
+      margin-top: 2px;
+    }
+    
+    .quick-start-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin: 1rem 0;
+    }
+    
+    .quick-start-btn {
+      padding: 12px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      min-height: 50px;
+    }
+    
+    .quick-start-btn:hover {
+      border-color: #5648c8;
+      background: rgba(102, 126, 234, 0.08);
+      transform: translateY(-1px);
+    }
+    
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #444;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    
+    select, input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background: #fff;
+      font-family: inherit;
+    }
+    
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: #6f55d4;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+    
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.25);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .secondary-btn {
+      background: #6c757d;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    
+    .secondary-btn:hover {
+      background: #5a6268;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e1e5e9;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .step {
+      background: #f1f3f7;
+      border-left: 4px solid #667eea;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+      display: none;
+    }
+    
+    .step.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .timer {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #5f4bb6;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin: 1rem 0;
+    }
+    
+    .choice-btn {
+      padding: 12px;
+      background: #fff;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+    
+    .choice-btn:hover {
+      border-color: #6f55d4;
+      background: rgba(102, 126, 234, 0.08);
+    }
+    
+    .audio-controls {
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 2px solid #e1e5e9;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .audio-toggle {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 0.8rem;
+      width: auto;
+      transition: all 0.2s ease;
+    }
+    
+    .audio-toggle.disable {
+      background: #dc3545;
+    }
+    
+    .volume-slider {
+      width: 150px;
+      margin: 0 10px;
+    }
+    
+    .speaking-indicator {
+      display: none;
+      text-align: center;
+      color: #5f4bb6;
+      font-style: italic;
+      margin: 10px 0;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0.5; }
+    }
+    
+    .feedback-section {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border: 2px solid #e1e5e9;
+    }
+    
+    .rating-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 8px 0;
+    }
+    
+    .rating-btn {
+      padding: 8px 14px;
+      border: 2px solid #e1e5e9;
+      border-radius: 20px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    
+    .rating-btn.selected {
+      border-color: #6f55d4;
+      background: rgba(102, 126, 234, 0.1);
+    }
+    
+    .intro-text {
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    
+    .donation-link {
+      text-align: center;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 10px;
+      border: 1px solid #e1e5e9;
+      font-size: 0.9rem;
+    }
+    
+    .donation-link a {
+      color: #5f4bb6;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .donation-link a:hover {
+      text-decoration: underline;
+    }
+    
+    .error-message {
+      color: #dc3545;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(220, 53, 69, 0.1);
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .success-message {
+      color: #28a745;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(40, 167, 69, 0.1);
+      border-radius: 4px;
+      display: none;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem;
+        margin: 10px;
+      }
+      
+      .app-title {
+        font-size: 1.8rem;
+      }
+      
+      .quick-start-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+      }
+      
+      .rating-buttons {
+        justify-content: flex-start;
+      }
+    }
+    
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* Focus styles for keyboard navigation */
+    button:focus, select:focus, input:focus, textarea:focus, .choice-btn:focus, .rating-btn:focus, .quick-start-btn:focus {
+      outline: 2px solid #6f55d4;
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
@@ -54,12 +422,22 @@
     <div id="setup-screen">
       <h1 class="app-title">MindfulMoments</h1>
       <p class="app-subtitle">Your personal micro-activity guide — learns with you</p>
+      
       <div class="user-stats" aria-label="user progress summary">
         <div><strong>Your Progress</strong></div>
         <div class="stats-grid">
-          <div class="stat-item"><div class="stat-number" id="total-sessions">0</div><div class="stat-label">Sessions</div></div>
-          <div class="stat-item"><div class="stat-number" id="current-streak">0</div><div class="stat-label">Day Streak</div></div>
-          <div class="stat-item"><div class="stat-number" id="total-minutes">0</div><div class="stat-label">Minutes</div></div>
+          <div class="stat-item">
+            <div class="stat-number" id="total-sessions">0</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="current-streak">0</div>
+            <div class="stat-label">Day Streak</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="total-minutes">0</div>
+            <div class="stat-label">Minutes</div>
+          </div>
         </div>
       </div>
 
@@ -69,251 +447,1188 @@
 
       <div class="form-group">
         <label for="time">How much time do you have?</label>
-        <select id="time"><option value="">Select time...</option><option value="1">1 minute</option><option value="2">2 minutes</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option></select>
+        <select id="time" aria-required="true">
+          <option value="">Select time...</option>
+          <option value="1">1 minute</option>
+          <option value="2">2 minutes</option>
+          <option value="5">5 minutes</option>
+          <option value="10">10 minutes</option>
+          <option value="15">15 minutes</option>
+          <option value="20">20 minutes</option>
+          <option value="30">30 minutes</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label for="location">Where are you?</label>
-        <select id="location"><option value="">Select location...</option><option value="home">At home</option><option value="office">At the office</option><option value="outdoors">Outdoors</option><option value="gym">At the gym</option><option value="commuting">Commuting/traveling</option></select>
+        <select id="location" aria-required="true">
+          <option value="">Select location...</option>
+          <option value="home">At home</option>
+          <option value="office">At the office</option>
+          <option value="outdoors">Outdoors</option>
+          <option value="gym">At the gym</option>
+          <option value="commuting">Commuting/traveling</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label for="activity-type">What type of activity?</label>
-        <select id="activity-type"><option value="">Select activity type...</option><option value="physical">Physical/Exercise 💪</option><option value="mental">Mental/Brain training 🧠</option><option value="creative">Creative/Writing ✍️</option><option value="relaxation">Relaxation/Meditation 🧘</option><option value="productivity">Productivity/Organization 📋</option></select>
+        <select id="activity-type" aria-required="true">
+          <option value="">Select activity type...</option>
+          <option value="physical">Physical/Exercise 💪</option>
+          <option value="mental">Mental/Brain training 🧠</option>
+          <option value="creative">Creative/Writing ✍️</option>
+          <option value="relaxation">Relaxation/Meditation 🧘</option>
+          <option value="productivity">Productivity/Organization 📋</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label for="energy-level">How's your energy level?</label>
-        <select id="energy-level"><option value="">Select energy level...</option><option value="low">😴 Low - Need gentle activities</option><option value="moderate">😊 Moderate - Ready for anything</option><option value="high">⚡ High - Bring on the challenge!</option></select>
+        <select id="energy-level" aria-required="true">
+          <option value="">Select energy level...</option>
+          <option value="low">😴 Low - Need gentle activities</option>
+          <option value="moderate">😊 Moderate - Ready for anything</option>
+          <option value="high">⚡ High - Bring on the challenge!</option>
+        </select>
       </div>
 
       <div class="audio-controls">
         <p><strong>🔊 Audio Features</strong></p>
-        <button class="audio-toggle" id="audio-toggle">Enable Voice Guidance</button>
-        <div style="margin:10px 0;"><label for="volume-slider">Volume: </label><input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="0.7"></div>
-        <p style="font-size:.75rem;color:#555;margin-top:4px;">Voice delivers warm, empathetic guidance like a real caring friend — adapts its phrasing so you don’t hear the same script twice.</p>
-        <button onclick="testVoice()" style="background:#17a2b8;width:auto;padding:8px 16px;margin:5px;font-size:.75rem;">Test Voice 🎵</button>
+        <button class="audio-toggle" id="audio-toggle" type="button">Enable Voice Guidance</button>
+        <div style="margin: 10px 0;">
+          <label for="volume-slider">Volume: </label>
+          <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="0.7" aria-label="Volume control">
+        </div>
+        <p style="font-size: 0.75rem; color: #555; margin-top: 4px;">
+          Voice delivers warm, empathetic guidance like a real caring friend — adapts its phrasing so you don't hear the same script twice.
+        </p>
+        <button type="button" onclick="testVoice()" style="background: #17a2b8; width: auto; padding: 8px 16px; margin: 5px; font-size: 0.75rem;">
+          Test Voice 🎵
+        </button>
       </div>
 
-      <button onclick="generateActivity()">Start My Activity! 🚀</button>
+      <div class="error-message" id="error-message"></div>
+      <button type="button" onclick="generateActivity()">Start My Activity! 🚀</button>
+      
       <div class="donation-link">
         <p>Enjoying MindfulMoments? <a href="#" onclick="showDonation()">☕ Support the project</a></p>
       </div>
     </div>
 
     <!-- Activity Screen -->
-    <div id="activity-screen" style="display:none;">
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-      <div id="activity-content"></div>
-      <div id="timer" class="timer" style="display:none;"></div>
-      <div id="speaking-indicator" class="speaking-indicator">🗣️ Speaking...</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-        <button id="next-btn" onclick="nextStep()" style="display:none;flex:1;">Ready! Next Step ➡️</button>
-        <button id="start-timer-btn" onclick="startTimer()" style="display:none;flex:1;">Start Timer ⏰</button>
+    <div id="activity-screen" style="display: none;">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
       </div>
-      <div style="margin-top:10px;display:flex;gap:10px;">
-        <button onclick="showFeedback()" class="secondary-btn" style="flex:1;display:none;" id="feedback-btn">How was it? 💭</button>
-        <button onclick="goHome()" class="secondary-btn" style="flex:1;">Start Over 🔄</button>
+      <div id="activity-content"></div>
+      <div id="timer" class="timer" style="display: none;"></div>
+      <div id="speaking-indicator" class="speaking-indicator">🗣️ Speaking...</div>
+      
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+        <button id="next-btn" type="button" onclick="nextStep()" style="display: none; flex: 1;">Ready! Next Step ➡️</button>
+        <button id="start-timer-btn" type="button" onclick="startTimer()" style="display: none; flex: 1;">Start Timer ⏰</button>
+      </div>
+      
+      <div style="margin-top: 10px; display: flex; gap: 10px;">
+        <button type="button" onclick="showFeedback()" class="secondary-btn" style="flex: 1; display: none;" id="feedback-btn">How was it? 💭</button>
+        <button type="button" onclick="goHome()" class="secondary-btn" style="flex: 1;">Start Over 🔄</button>
       </div>
     </div>
 
     <!-- Feedback Screen -->
-    <div id="feedback-screen" style="display:none;">
+    <div id="feedback-screen" style="display: none;">
       <div class="feedback-section">
         <h2>How was your session? 💭</h2>
+        
         <div class="form-group">
           <label>How did you feel?</label>
           <div class="rating-buttons" id="mood-rating">
-            <div class="rating-btn" data-value="stressed" onclick="selectRating('mood','stressed')">😰 Stressed</div>
-            <div class="rating-btn" data-value="neutral" onclick="selectRating('mood','neutral')">😐 Neutral</div>
-            <div class="rating-btn" data-value="good" onclick="selectRating('mood','good')">😊 Good</div>
-            <div class="rating-btn" data-value="amazing" onclick="selectRating('mood','amazing')">🤩 Amazing</div>
+            <div class="rating-btn" data-value="stressed" onclick="selectRating('mood','stressed')" tabindex="0" role="button" aria-pressed="false">😰 Stressed</div>
+            <div class="rating-btn" data-value="neutral" onclick="selectRating('mood','neutral')" tabindex="0" role="button" aria-pressed="false">😐 Neutral</div>
+            <div class="rating-btn" data-value="good" onclick="selectRating('mood','good')" tabindex="0" role="button" aria-pressed="false">😊 Good</div>
+            <div class="rating-btn" data-value="amazing" onclick="selectRating('mood','amazing')" tabindex="0" role="button" aria-pressed="false">🤩 Amazing</div>
           </div>
         </div>
+        
         <div class="form-group">
           <label>How was the difficulty?</label>
           <div class="rating-buttons" id="difficulty-rating">
-            <div class="rating-btn" data-value="too-easy" onclick="selectRating('difficulty','too-easy')">Too Easy</div>
-            <div class="rating-btn" data-value="just-right" onclick="selectRating('difficulty','just-right')">Just Right</div>
-            <div class="rating-btn" data-value="too-hard" onclick="selectRating('difficulty','too-hard')">Too Hard</div>
+            <div class="rating-btn" data-value="too-easy" onclick="selectRating('difficulty','too-easy')" tabindex="0" role="button" aria-pressed="false">Too Easy</div>
+            <div class="rating-btn" data-value="just-right" onclick="selectRating('difficulty','just-right')" tabindex="0" role="button" aria-pressed="false">Just Right</div>
+            <div class="rating-btn" data-value="too-hard" onclick="selectRating('difficulty','too-hard')" tabindex="0" role="button" aria-pressed="false">Too Hard</div>
           </div>
         </div>
+        
         <div class="form-group">
-          <label>Any thoughts or suggestions?</label>
+          <label for="feedback-text">Any thoughts or suggestions?</label>
           <textarea id="feedback-text" rows="3" placeholder="Optional: What would make this better?"></textarea>
         </div>
-        <button onclick="submitFeedback()">Submit Feedback ✨</button>
-        <button onclick="goHome()" class="secondary-btn">Start New Activity 🚀</button>
+        
+        <div class="success-message" id="success-message"></div>
+        <button type="button" onclick="submitFeedback()">Submit Feedback ✨</button>
+        <button type="button" onclick="goHome()" class="secondary-btn">Start New Activity 🚀</button>
       </div>
     </div>
   </div>
 
   <script>
+    'use strict';
+    
     // ------------------ Persistence & Learning ------------------
     const USER_DATA_KEY = 'mindfulmoments_data';
-    function getUserData(){
-      const stored = localStorage.getItem(USER_DATA_KEY);
-      return stored ? JSON.parse(stored) : {totalSessions:0,totalMinutes:0,currentStreak:0,lastSessionDate:null,sessions:[],feedback:[],usage:{},preferences:{}};
+    
+    function getUserData() {
+      try {
+        const stored = localStorage.getItem(USER_DATA_KEY);
+        return stored ? JSON.parse(stored) : {
+          totalSessions: 0,
+          totalMinutes: 0,
+          currentStreak: 0,
+          lastSessionDate: null,
+          sessions: [],
+          feedback: [],
+          usage: {},
+          preferences: {}
+        };
+      } catch (error) {
+        console.error('Error reading user data:', error);
+        return {
+          totalSessions: 0,
+          totalMinutes: 0,
+          currentStreak: 0,
+          lastSessionDate: null,
+          sessions: [],
+          feedback: [],
+          usage: {},
+          preferences: {}
+        };
+      }
     }
-    function saveUserData(data){ localStorage.setItem(USER_DATA_KEY, JSON.stringify(data)); }
-    function updateStats(){ const u=getUserData(); document.getElementById('total-sessions').textContent=u.totalSessions; document.getElementById('current-streak').textContent=u.currentStreak; document.getElementById('total-minutes').textContent=u.totalMinutes; }
+    
+    function saveUserData(data) {
+      try {
+        localStorage.setItem(USER_DATA_KEY, JSON.stringify(data));
+      } catch (error) {
+        console.error('Error saving user data:', error);
+        showError('Unable to save progress. Please check your browser storage settings.');
+      }
+    }
+    
+    function updateStats() {
+      const userData = getUserData();
+      document.getElementById('total-sessions').textContent = userData.totalSessions;
+      document.getElementById('current-streak').textContent = userData.currentStreak;
+      document.getElementById('total-minutes').textContent = userData.totalMinutes;
+    }
+
+    // ------------------ Error Handling ------------------
+    function showError(message) {
+      const errorEl = document.getElementById('error-message');
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+        setTimeout(() => {
+          errorEl.style.display = 'none';
+        }, 5000);
+      }
+    }
+    
+    function showSuccess(message) {
+      const successEl = document.getElementById('success-message');
+      if (successEl) {
+        successEl.textContent = message;
+        successEl.style.display = 'block';
+        setTimeout(() => {
+          successEl.style.display = 'none';
+        }, 3000);
+      }
+    }
 
     // ------------------ Adaptive Quick Starts ------------------
     const baseQuickStarts = [
-      {label:'🧘 5min Meditation', type:'relaxation', time:5},
-      {label:'💪 10min Workout', type:'physical', time:10},
-      {label:'✍️ 5min Writing', type:'creative', time:5},
-      {label:'🧠 10min Brain Training', type:'mental', time:10}
+      { label: '🧘 5min Meditation', type: 'relaxation', time: 5 },
+      { label: '💪 10min Workout', type: 'physical', time: 10 },
+      { label: '✍️ 5min Writing', type: 'creative', time: 5 },
+      { label: '🧠 10min Brain Training', type: 'mental', time: 10 }
     ];
 
-    function adaptQuickStarts(){
+    function adaptQuickStarts() {
       const user = getUserData();
+      const typeScore = { physical: 0, relaxation: 0, creative: 0, mental: 0, productivity: 0 };
+      
       // Score activity types based on recent feedback and usage
-      const typeScore = {physical:0,relaxation:0,creative:0,mental:0};
       user.feedback.slice(-10).forEach(f => {
-        if(f.activityType){
-          // if mood is stressed, boost relaxation
-          if(f.mood==='stressed' && f.activityType==='relaxation') typeScore.relaxation += 2;
-          if(f.mood==='good' || f.mood==='amazing') typeScore[f.activityType] += 1;
-          if(f.difficulty==='too-hard') typeScore[f.activityType] -= 1;
-          if(f.difficulty==='too-easy') typeScore[f.activityType] -= 0.5;
+        if (f.activityType && typeScore.hasOwnProperty(f.activityType)) {
+          // Boost relaxation if user was stressed
+          if (f.mood === 'stressed' && f.activityType === 'relaxation') {
+            typeScore.relaxation += 2;
+          }
+          // Boost activities that made user feel good
+          if (f.mood === 'good' || f.mood === 'amazing') {
+            typeScore[f.activityType] += 1;
+          }
+          // Reduce activities that were too hard
+          if (f.difficulty === 'too-hard') {
+            typeScore[f.activityType] -= 1;
+          }
+          // Slightly reduce activities that were too easy
+          if (f.difficulty === 'too-easy') {
+            typeScore[f.activityType] -= 0.5;
+          }
         }
       });
-      // Recent usage frequency
-      Object.entries(user.usage||{}).forEach(([key,count]) => { // key like 'physical-10'
-        const [atype, t] = key.split('-');
-        typeScore[atype] += Math.min(count * 0.1, 2); // diminishing returns
+      
+      // Factor in recent usage frequency
+      Object.entries(user.usage || {}).forEach(([key, count]) => {
+        const [activityType] = key.split('-');
+        if (typeScore.hasOwnProperty(activityType)) {
+          typeScore[activityType] += Math.min(count * 0.1, 2); // Diminishing returns
+        }
       });
-      // Build sorted quick-starts with adapted priority
-      const sorted = [...baseQuickStarts].sort((a,b)=>{
+      
+      // Sort quick-starts by adapted priority
+      const sorted = [...baseQuickStarts].sort((a, b) => {
         const aScore = typeScore[a.type] || 0;
         const bScore = typeScore[b.type] || 0;
         return bScore - aScore;
       });
+      
       return sorted;
     }
 
-    function renderQuickStarts(){
-      const container=document.getElementById('quick-starts');
-      container.innerHTML='';
-      const adapted=adaptQuickStarts();
-      adapted.forEach(q=>{
-        const btn=document.createElement('div');
-        btn.className='quick-start-btn';
-        btn.textContent=q.label;
-        btn.onclick=()=>{ quickStart(q.type,q.time); };
+    function renderQuickStarts() {
+      const container = document.getElementById('quick-starts');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      const adapted = adaptQuickStarts();
+      
+      adapted.forEach(quickStart => {
+        const btn = document.createElement('div');
+        btn.className = 'quick-start-btn';
+        btn.textContent = quickStart.label;
+        btn.tabIndex = 0;
+        btn.role = 'button';
+        btn.onclick = () => quickStartActivity(quickStart.type, quickStart.time);
+        btn.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            quickStartActivity(quickStart.type, quickStart.time);
+          }
+        };
         container.appendChild(btn);
       });
     }
 
-    // ------------------ Voice & Tone ------------------
-    let audioEnabled=false;
-    const speechSynth=window.speechSynthesis;
-    function toggleAudio(){ audioEnabled=!audioEnabled; const tbtn=document.getElementById('audio-toggle'); if(audioEnabled){ tbtn.textContent='Disable Voice Guidance'; tbtn.classList.add('disable'); } else{ tbtn.textContent='Enable Voice Guidance'; tbtn.classList.remove('disable'); stopSpeaking(); }}
-    document.getElementById('audio-toggle').addEventListener('click',toggleAudio);
-
-    function makeTextNatural(text){
-      // simplified mapping to avoid over-repetition, pick random alternative when applicable
-      const replacements = [
-        {from:/Let\'s begin/g,to:"Let's gently begin, I'm here with you."},
-        {from:/Ready/g,to:"When you're ready, only when you're ready."},
-        {from:/Excellent/g,to:"That's just beautiful."},
-        {from:/Great job/g,to:"You're doing something really special."}
-      ];
-      let out=text;
-      replacements.forEach(r=>{ out=out.replace(r.from,r.to); });
-      return out;
+    // ------------------ Voice & Audio ------------------
+    let audioEnabled = false;
+    let speechSynthesis = null;
+    let currentUtterance = null;
+    
+    // Initialize speech synthesis safely
+    function initializeSpeech() {
+      if ('speechSynthesis' in window) {
+        speechSynthesis = window.speechSynthesis;
+        return true;
+      }
+      return false;
     }
 
-    function speak(text, callback){
-      if(!audioEnabled){ if(callback) callback(); return; }
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const toggleBtn = document.getElementById('audio-toggle');
+      
+      if (audioEnabled) {
+        if (!initializeSpeech()) {
+          audioEnabled = false;
+          showError('Speech synthesis not supported in this browser.');
+          return;
+        }
+        toggleBtn.textContent = 'Disable Voice Guidance';
+        toggleBtn.classList.add('disable');
+      } else {
+        toggleBtn.textContent = 'Enable Voice Guidance';
+        toggleBtn.classList.remove('disable');
+        stopSpeaking();
+      }
+    }
+
+    function makeTextNatural(text) {
+      // Vary language to prevent repetition
+      const variations = {
+        "Let's begin": [
+          "Let's gently begin, I'm here with you.",
+          "Ready to start? I'm right here.",
+          "Let's take this moment together."
+        ],
+        "Ready": [
+          "When you're ready, only when you're ready.",
+          "Take your time, no rush.",
+          "Whenever you feel prepared."
+        ],
+        "Excellent": [
+          "That's just beautiful.",
+          "Wonderful work.",
+          "You're doing great."
+        ],
+        "Great job": [
+          "You're doing something really special.",
+          "That's fantastic.",
+          "Beautiful effort."
+        ]
+      };
+      
+      let result = text;
+      Object.entries(variations).forEach(([pattern, replacements]) => {
+        if (result.includes(pattern)) {
+          const randomReplacement = replacements[Math.floor(Math.random() * replacements.length)];
+          result = result.replace(pattern, randomReplacement);
+        }
+      });
+      
+      return result;
+    }
+
+    function speak(text, callback) {
+      if (!audioEnabled || !speechSynthesis) {
+        if (callback) callback();
+        return;
+      }
+      
       stopSpeaking();
-      const utter=new SpeechSynthesisUtterance(makeTextNatural(text));
-      const voices=speechSynth.getVoices();
-      utter.rate=0.85; utter.pitch=0.9; utter.volume=parseFloat(document.getElementById('volume-slider').value);
-      // pick a friendly English voice if available
-      const preferred=['Alex','Google US English','Microsoft David Desktop'];
-      for(const name of preferred){ const v=voices.find(v=>v.name.includes(name)); if(v){ utter.voice=v; break; }}
-      document.getElementById('speaking-indicator').style.display='block';
-      utter.onend=()=>{ document.getElementById('speaking-indicator').style.display='none'; if(callback) callback(); };
-      utter.onerror=()=>{ document.getElementById('speaking-indicator').style.display='none'; if(callback) callback(); };
-      speechSynth.speak(utter);
+      
+      try {
+        currentUtterance = new SpeechSynthesisUtterance(makeTextNatural(text));
+        const volumeSlider = document.getElementById('volume-slider');
+        
+        currentUtterance.rate = 0.85;
+        currentUtterance.pitch = 0.9;
+        currentUtterance.volume = volumeSlider ? parseFloat(volumeSlider.value) : 0.7;
+        
+        // Try to select a pleasant voice
+        const voices = speechSynthesis.getVoices();
+        const preferredVoices = ['Alex', 'Google US English', 'Microsoft David Desktop', 'Samantha'];
+        
+        for (const voiceName of preferredVoices) {
+          const voice = voices.find(v => v.name.includes(voiceName));
+          if (voice) {
+            currentUtterance.voice = voice;
+            break;
+          }
+        }
+        
+        const speakingIndicator = document.getElementById('speaking-indicator');
+        if (speakingIndicator) {
+          speakingIndicator.style.display = 'block';
+        }
+        
+        currentUtterance.onend = () => {
+          if (speakingIndicator) {
+            speakingIndicator.style.display = 'none';
+          }
+          currentUtterance = null;
+          if (callback) callback();
+        };
+        
+        currentUtterance.onerror = (event) => {
+          console.error('Speech synthesis error:', event.error);
+          if (speakingIndicator) {
+            speakingIndicator.style.display = 'none';
+          }
+          currentUtterance = null;
+          if (callback) callback();
+        };
+        
+        speechSynthesis.speak(currentUtterance);
+      } catch (error) {
+        console.error('Error with speech synthesis:', error);
+        if (callback) callback();
+      }
     }
-    function stopSpeaking(){ speechSynth.cancel(); document.getElementById('speaking-indicator').style.display='none'; }
-    function testVoice(){ if(!audioEnabled) toggleAudio(); speak('Hey friend, I see you. Let's take a moment just for you. Breathe... you are exactly where you need to be.'); }
 
-    // ------------------ Activity logic ------------------
-    let activityData={}; let currentSessionData={}; let currentStep=0; let totalSteps=0; let timerInterval=null; let selectedRatings={};
-    const activities={
-      physical:{home:{1:{title:'Quick Energizer',intro:'Just one minute to get your energy up!',steps:['Stand up and take 3 deep breaths','Do 5 jumping jacks','Hold a 15-second plank','Finish with arm circles and a stretch']},5:{title:'Mini Home Workout',intro:'Perfect! 5 minutes is ideal for a quick strength circuit.',steps:['Warm up: March in place for 30 seconds','Do 15 bodyweight squats','Hold a plank for 45 seconds','Do 10 push-ups (modify as needed)','Do 20 high knees','Cool down: Stretch your arms and legs for 1 minute']},10:{title:'Full Body Energizer',intro:'Excellent! 10 minutes gives us time for a complete mini-workout.',steps:['Warm up: Light stretching and arm circles (1 minute)','Circuit 1: 20 squats, 10 push-ups, 30-second plank','Rest 30s','Circuit 2: 15 lunges each leg, 20 mountain climbers','Rest 30s','Circuit 3: 10 burpees (or modified)','Cool down: Full body stretch (2 minutes)']}}},
-      relaxation:{home:{1:{title:'Quick Reset',intro:'A perfect 1-minute reset for your mind.',isMeditation:true,focusPoint:'Take slow, deep breaths and let go of any tension.',guidance:'One minute of mindful breathing to reset and refresh.',voiceGuidance:['Get settled. Breathe in gently... and out.','Notice how your body softens.','You are giving yourself this space, and that matters.']},5:{title:'Mini Meditation',intro:'Perfect! 5 minutes is ideal for a refreshing meditation session.',isMeditation:true,focusPoint:'Focus on your breath. Feel it move naturally.',guidance:'Let's settle together for 5 minutes.',voiceGuidance:['Welcome. Take a seat where you feel supported.','Feel the rise and fall of breath.','If the mind drifts, kindly bring it back.']}}},
-      creative:{home:{1:{title:'Flash Writing',intro:'Quick creative burst!',isWriting:true,prompts:['Write about the first thing you see right now','Describe your perfect morning in exactly 50 words','Write a tiny story that starts with \'Suddenly, everything changed...\'']},5:{title:'Quick Creative Writing',intro:'Let\'s spark your creativity!',isWriting:true,prompts:['Write about a world where colors have sounds','Describe a conversation between your past and future self','Tell the story of the last person on Earth finding a mysterious note']}}},
-      mental:{home:{10:{title:'Brain Training Session',intro:'Time to give your brain a workout!',steps:['Memory challenge: Look around and memorize 10 objects','Recall all 10 in order with eyes closed','Math warm-up: Backwards from 100 by 7s for 1 minute','Creative thinking: Name 10 unusual uses for a paperclip','Pattern recognition: Make a sequence and extend it','Reflection: Name 3 things you learned today']}}}
+    function stopSpeaking() {
+      if (speechSynthesis && currentUtterance) {
+        speechSynthesis.cancel();
+        currentUtterance = null;
+      }
+      const speakingIndicator = document.getElementById('speaking-indicator');
+      if (speakingIndicator) {
+        speakingIndicator.style.display = 'none';
+      }
+    }
+
+    function testVoice() {
+      if (!audioEnabled) {
+        toggleAudio();
+      }
+      speak('Hey friend, I see you. Let\'s take a moment just for you. Breathe... you are exactly where you need to be.');
+    }
+
+    // ------------------ Activity Data ------------------
+    const activities = {
+      physical: {
+        home: {
+          1: {
+            title: 'Quick Energizer',
+            intro: 'Just one minute to get your energy up!',
+            steps: [
+              'Stand up and take 3 deep breaths',
+              'Do 5 jumping jacks',
+              'Hold a 15-second plank',
+              'Finish with arm circles and a stretch'
+            ]
+          },
+          5: {
+            title: 'Mini Home Workout',
+            intro: 'Perfect! 5 minutes is ideal for a quick strength circuit.',
+            steps: [
+              'Warm up: March in place for 30 seconds',
+              'Do 15 bodyweight squats',
+              'Hold a plank for 45 seconds',
+              'Do 10 push-ups (modify as needed)',
+              'Do 20 high knees',
+              'Cool down: Stretch your arms and legs for 1 minute'
+            ]
+          },
+          10: {
+            title: 'Full Body Energizer',
+            intro: 'Excellent! 10 minutes gives us time for a complete mini-workout.',
+            steps: [
+              'Warm up: Light stretching and arm circles (1 minute)',
+              'Circuit 1: 20 squats, 10 push-ups, 30-second plank',
+              'Rest 30 seconds',
+              'Circuit 2: 15 lunges each leg, 20 mountain climbers',
+              'Rest 30 seconds',
+              'Circuit 3: 10 burpees (or modified)',
+              'Cool down: Full body stretch (2 minutes)'
+            ]
+          }
+        },
+        office: {
+          5: {
+            title: 'Desk Break Workout',
+            intro: 'Time to energize without leaving your workspace!',
+            steps: [
+              'Stand and do 10 desk push-ups',
+              'Do 20 seated leg extensions',
+              'Stand and do 15 calf raises',
+              'Do 10 chair dips',
+              'Finish with neck and shoulder rolls'
+            ]
+          }
+        }
+      },
+      relaxation: {
+        home: {
+          1: {
+            title: 'Quick Reset',
+            intro: 'A perfect 1-minute reset for your mind.',
+            isMeditation: true,
+            focusPoint: 'Take slow, deep breaths and let go of any tension.',
+            guidance: 'One minute of mindful breathing to reset and refresh.',
+            voiceGuidance: [
+              'Get settled. Breathe in gently... and out.',
+              'Notice how your body softens.',
+              'You are giving yourself this space, and that matters.'
+            ]
+          },
+          5: {
+            title: 'Mini Meditation',
+            intro: 'Perfect! 5 minutes is ideal for a refreshing meditation session.',
+            isMeditation: true,
+            focusPoint: 'Focus on your breath. Feel it move naturally.',
+            guidance: 'Let\'s settle together for 5 minutes.',
+            voiceGuidance: [
+              'Welcome. Take a seat where you feel supported.',
+              'Feel the rise and fall of breath.',
+              'If the mind drifts, kindly bring it back.',
+              'You\'re doing beautifully.',
+              'Just a little more time to rest here.'
+            ]
+          },
+          10: {
+            title: 'Deep Relaxation',
+            intro: 'Wonderful! 10 minutes for a deep, restorative meditation.',
+            isMeditation: true,
+            focusPoint: 'Allow your whole body to relax completely.',
+            guidance: 'A longer journey into peaceful awareness.',
+            voiceGuidance: [
+              'Make yourself completely comfortable.',
+              'Let your breathing slow and deepen.',
+              'Feel tension melting away from your shoulders.',
+              'Notice the space between your thoughts.',
+              'You are safe and at peace.',
+              'Rest here as long as you need.',
+              'Feel gratitude for this time you\'ve given yourself.'
+            ]
+          }
+        }
+      },
+      creative: {
+        home: {
+          1: {
+            title: 'Flash Writing',
+            intro: 'Quick creative burst!',
+            isWriting: true,
+            prompts: [
+              'Write about the first thing you see right now',
+              'Describe your perfect morning in exactly 50 words',
+              'Write a tiny story that starts with "Suddenly, everything changed..."'
+            ]
+          },
+          5: {
+            title: 'Quick Creative Writing',
+            intro: 'Let\'s spark your creativity!',
+            isWriting: true,
+            prompts: [
+              'Write about a world where colors have sounds',
+              'Describe a conversation between your past and future self',
+              'Tell the story of the last person on Earth finding a mysterious note',
+              'Write about a character who can taste emotions',
+              'Describe a place that exists only in dreams'
+            ]
+          },
+          10: {
+            title: 'Creative Flow Session',
+            intro: 'Perfect time for deeper creative exploration!',
+            isWriting: true,
+            prompts: [
+              'Write a letter to yourself from 10 years in the future',
+              'Create a story where gravity stops working for one day',
+              'Describe a world where memories can be traded like currency',
+              'Write about finding a door in your home that was never there before',
+              'Tell the story of the last bookstore in the world'
+            ]
+          }
+        }
+      },
+      mental: {
+        home: {
+          5: {
+            title: 'Quick Brain Training',
+            intro: 'Time to give your mind a workout!',
+            steps: [
+              'Memory challenge: Look around and memorize 8 objects',
+              'Recall all 8 in order with eyes closed',
+              'Math warm-up: Count backwards from 100 by 7s',
+              'Creative thinking: Name 7 unusual uses for a paperclip',
+              'Reflection: Name 3 things you learned today'
+            ]
+          },
+          10: {
+            title: 'Brain Training Session',
+            intro: 'Excellent! Time for a comprehensive mental workout!',
+            steps: [
+              'Memory challenge: Look around and memorize 12 objects',
+              'Recall all 12 in order with eyes closed',
+              'Math warm-up: Backwards from 100 by 7s for 1 minute',
+              'Creative thinking: Name 10 unusual uses for a paperclip',
+              'Pattern recognition: Create a number sequence and extend it',
+              'Word challenge: Name 15 words that start with the last letter of your name',
+              'Reflection: Describe 3 insights you\'ve had this week'
+            ]
+          }
+        }
+      },
+      productivity: {
+        home: {
+          5: {
+            title: 'Quick Organization',
+            intro: 'Let\'s get organized in just 5 minutes!',
+            steps: [
+              'Clear your immediate workspace',
+              'Write down 3 priority tasks for today',
+              'Delete 10 old photos from your phone',
+              'Organize one small drawer or area',
+              'Set up tomorrow\'s most important task'
+            ]
+          },
+          10: {
+            title: 'Productivity Boost',
+            intro: 'Perfect! 10 minutes to supercharge your productivity!',
+            steps: [
+              'Brain dump: Write down everything on your mind (2 minutes)',
+              'Identify your top 3 priorities for today',
+              'Organize your digital desktop or phone home screen',
+              'Clear and organize your immediate physical space',
+              'Plan your next 3 work sessions',
+              'Set up systems to maintain this organization'
+            ]
+          }
+        },
+        office: {
+          5: {
+            title: 'Desk Organization',
+            intro: 'Quick office productivity boost!',
+            steps: [
+              'Clear your desk surface completely',
+              'Organize papers into 3 piles: do, file, trash',
+              'Clean your computer screen and keyboard',
+              'Update your task list',
+              'Prepare materials for your next meeting/task'
+            ]
+          }
+        }
+      }
     };
 
-    function showScreen(id){ document.querySelectorAll('#setup-screen,#activity-screen,#feedback-screen').forEach(el=>el.style.display='none'); document.getElementById(id).style.display='block'; }
-    function goHome(){ resetActivityState(); renderQuickStarts(); showScreen('setup-screen'); }
-    function resetActivityState(){ currentStep=0; if(timerInterval) clearInterval(timerInterval); stopSpeaking(); selectedRatings={}; document.getElementById('progress-fill').style.width='0%'; }
+    // ------------------ Activity Logic ------------------
+    let activityData = {};
+    let currentSessionData = {};
+    let currentStep = 0;
+    let totalSteps = 0;
+    let timerInterval = null;
+    let selectedRatings = {};
 
-    function quickStart(type,time){ document.getElementById('activity-type').value=type; document.getElementById('time').value=time; document.getElementById('location').value='home'; document.getElementById('energy-level').value='moderate'; generateActivity(); }
-
-    function generateActivity(){
-      const time=parseInt(document.getElementById('time').value,10);
-      const location=document.getElementById('location').value;
-      const activityType=document.getElementById('activity-type').value;
-      const energyLevel=document.getElementById('energy-level').value;
-      if(!time||!location||!activityType||!energyLevel){ alert('Please complete all fields so I can guide you properly.'); return; }
-      const activity=findBestActivity(activityType,location,time);
-      if(!activity){ alert('I haven\'t learned your perfect combination yet. Try a nearby time or type.'); return; }
-      activityData={...activity,time,location,type:activityType,energyLevel};
-      currentSessionData={type:activityType,duration:time,location,energyLevel,startTime:new Date(),completed:false};
-      // track usage for adaptation
-      const user=getUserData(); const key=activityType+'-'+time; user.usage[key]=(user.usage[key]||0)+1; saveUserData(user);
-      showScreen('activity-screen'); showActivity();
+    function showScreen(screenId) {
+      const screens = ['setup-screen', 'activity-screen', 'feedback-screen'];
+      screens.forEach(id => {
+        const screen = document.getElementById(id);
+        if (screen) {
+          screen.style.display = id === screenId ? 'block' : 'none';
+        }
+      });
     }
 
-    function findBestActivity(type,location,time){
-      if(activities[type] && activities[type][location]){
-        const avail=Object.keys(activities[type][location]).map(Number).sort((a,b)=>b-a);
-        const chosen=avail.find(t=>t<=time)||avail[avail.length-1];
-        return activities[type][location][chosen];
+    function goHome() {
+      resetActivityState();
+      renderQuickStarts();
+      showScreen('setup-screen');
+    }
+
+    function resetActivityState() {
+      currentStep = 0;
+      totalSteps = 0;
+      activityData = {};
+      currentSessionData = {};
+      selectedRatings = {};
+      
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
       }
-      // fallback simple
-      return {title:'Quick Reset',intro:'Let\'s take a breath.',isMeditation:true,focusPoint:'Breathe slowly.',guidance:'Take a moment for yourself.',voiceGuidance:['Just settle in.','Feel your breath.']};
+      
+      stopSpeaking();
+      
+      const progressFill = document.getElementById('progress-fill');
+      if (progressFill) {
+        progressFill.style.width = '0%';
+      }
+      
+      // Hide all activity buttons
+      const buttons = ['next-btn', 'start-timer-btn', 'feedback-btn'];
+      buttons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.style.display = 'none';
+      });
+      
+      // Clear error messages
+      const errorMsg = document.getElementById('error-message');
+      if (errorMsg) errorMsg.style.display = 'none';
     }
 
-    function showActivity(){ currentStep=0; if(activityData.isMeditation){ showMeditation(); } else if(activityData.isWriting){ showWritingPrompts(); } else{ showSteps(); } }
-    function showMeditation(){ const c=document.getElementById('activity-content'); c.innerHTML=`<h2>${activityData.title}</h2><p class="intro-text">${activityData.intro}</p><div class="step active"><h3>Get Ready</h3><p>${activityData.focusPoint}</p><p><strong>${activityData.guidance}</strong></p></div>`; document.getElementById('start-timer-btn').style.display='block'; if(audioEnabled){ speak(activityData.intro + ' ' + activityData.focusPoint); } }
-    function showWritingPrompts(){ const c=document.getElementById('activity-content'); let html='<div class="choices">'; activityData.prompts.forEach((p,i)=>{ html+=`<div class="choice-btn" onclick="selectWritingPrompt(${i})">${p}</div>`; }); html+='</div>'; c.innerHTML=`<h2>${activityData.title}</h2><p class="intro-text">${activityData.intro}</p><div class="step active"><h3>Choose Prompt</h3><p>Pick one that speaks to you:</p>${html}</div>`; }
-    function selectWritingPrompt(index){ const c=document.getElementById('activity-content'); c.innerHTML=`<h2>${activityData.title}</h2><div class="step active"><h3>Your Prompt</h3><p><strong>"${activityData.prompts[index]}"</strong></p><p>I'll hold space while you write for ${activityData.time} minutes. Go ahead; I'll wait.</p></div>`; document.getElementById('start-timer-btn').style.display='block'; }
-    function showSteps(){ totalSteps=activityData.steps.length; const c=document.getElementById('activity-content'); let html=`<h2>${activityData.title}</h2><p class="intro-text">${activityData.intro}</p>`; activityData.steps.forEach((s,i)=>{ html+=`<div class="step" id="step-${i}"><h3>Step ${i+1} of ${totalSteps}</h3><p>${s}</p></div>`; }); c.innerHTML=html; showCurrentStep(); }
-    function showCurrentStep(){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); const el=document.getElementById('step-'+currentStep); if(el){ el.classList.add('active'); document.getElementById('next-btn').style.display='inline-block'; if(audioEnabled && activityData.steps){ speak(`Step ${currentStep+1}. ${activityData.steps[currentStep]}`); } updateProgress(); } }
-    function nextStep(){ currentStep++; if(currentStep>=totalSteps){ showCompletion(); } else{ showCurrentStep(); } }
-    function updateProgress(override){ const progress=override!==undefined?override:((currentStep+1)/totalSteps)*100; document.getElementById('progress-fill').style.width=progress+'%'; }
-    function showCompletion(){ const c=document.getElementById('activity-content'); c.innerHTML=`<div class="step active"><h2>🎉 Awesome Job!</h2><p>You've completed your ${activityData.title}! How do you feel? Remember: small consistent moments add up.</p></div>`; document.getElementById('next-btn').style.display='none'; document.getElementById('feedback-btn').style.display='inline-block'; updateProgress(100); currentSessionData.completed=true; currentSessionData.endTime=new Date(); recordSession(); if(audioEnabled){ speak("You're doing something really special. Take a breath and check in with yourself."); } }
-    function startTimer(){ const total=activityData.time*60; let remaining=total; let voiceIndex=0; document.getElementById('timer').style.display='block'; document.getElementById('start-timer-btn').style.display='none'; if(activityData.isMeditation && audioEnabled && activityData.voiceGuidance){ setTimeout(()=>speak(activityData.voiceGuidance[0]),500); }
-      timerInterval=setInterval(()=>{ const mins=Math.floor(remaining/60); const secs=remaining%60; document.getElementById('timer').textContent=`${mins}:${String(secs).padStart(2,'0')}`; // guidance spaced evenly
-        if(activityData.isMeditation && audioEnabled && activityData.voiceGuidance){ const totalTime=total; const elapsed=total-remaining; const interval=Math.floor(totalTime/activityData.voiceGuidance.length); if(elapsed>0 && interval>0 && elapsed%interval===0 && voiceIndex<activityData.voiceGuidance.length-1){ voiceIndex++; speak(activityData.voiceGuidance[voiceIndex]); } }
-        remaining--; if(remaining<0){ clearInterval(timerInterval); playBell(); document.getElementById('timer').textContent="Time's up! 🎉"; setTimeout(()=>{ if(audioEnabled){ let finishMsg='And there we are... you've done something beautiful today.'; if(activityData.isWriting) finishMsg='Great work—your creativity showed up.'; speak(finishMsg); } setTimeout(showCompletion,1200); },800); } },1000);
-    }
-    function recordSession(){ const user=getUserData(); user.sessions.push(currentSessionData); user.totalSessions++; user.totalMinutes+=currentSessionData.duration; const today=new Date().toDateString(); if(user.lastSessionDate!==today){ const yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1); if(user.lastSessionDate===yesterday.toDateString()){ user.currentStreak++; } else{ user.currentStreak=1; } user.lastSessionDate=today; } saveUserData(user); updateStats(); }
-    function showFeedback(){ showScreen('feedback-screen'); }
-    function selectRating(cat,val){ selectedRatings[cat]=val; document.querySelectorAll(`#${cat}-rating .rating-btn`).forEach(b=>{ b.classList.toggle('selected', b.getAttribute('data-value')===val); }); }
-    function submitFeedback(){ const text=document.getElementById('feedback-text').value; const feedback={sessionId:currentSessionData.startTime.getTime(),mood:selectedRatings.mood,difficulty:selectedRatings.difficulty,text, timestamp:new Date(),activityType:currentSessionData.type,duration:currentSessionData.duration}; const user=getUserData(); user.feedback.push(feedback); saveUserData(user); adaptNextActivityBasedOnFeedback(feedback); if(audioEnabled){ speak('Thank you. I learn from you, and I will tailor future suggestions.'); } setTimeout(goHome,audioEnabled?1500:500); }
-    // Adapt difficulty/next suggestion based on last feedback
-    function adaptNextActivityBasedOnFeedback(feedback){ const user=getUserData(); // simple rule: if too easy, bump similar future time up 30%; if too hard, reduce by 30%
-      if(feedback.difficulty==='too-easy'){ const key=feedback.activityType + '-' + feedback.duration; const larger = Math.min(Math.ceil(feedback.duration * 1.3), 30); user.preferences[feedback.activityType]=user.preferences[feedback.activityType]||{}; user.preferences[feedback.activityType].lastSuggestedTime=larger; }
-      if(feedback.difficulty==='too-hard'){ const smaller = Math.max(Math.floor(feedback.duration * 0.7),1); user.preferences[feedback.activityType]=user.preferences[feedback.activityType]||{}; user.preferences[feedback.activityType].lastSuggestedTime=smaller; }
-      saveUserData(user);
+    function quickStartActivity(type, time) {
+      document.getElementById('activity-type').value = type;
+      document.getElementById('time').value = time;
+      document.getElementById('location').value = 'home';
+      document.getElementById('energy-level').value = 'moderate';
+      generateActivity();
     }
 
-    function playBell(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.frequency.setValueAtTime(528,ctx.currentTime); osc.type='sine'; gain.gain.setValueAtTime(0,ctx.currentTime); gain.gain.linearRampToValueAtTime(0.15,ctx.currentTime+.1); gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+2); osc.start(); osc.stop(ctx.currentTime+2); }catch(e){ if(audioEnabled) speak('Session complete!'); }
+    function generateActivity() {
+      const time = parseInt(document.getElementById('time').value, 10);
+      const location = document.getElementById('location').value;
+      const activityType = document.getElementById('activity-type').value;
+      const energyLevel = document.getElementById('energy-level').value;
+
+      // Validate required fields
+      if (!time || !location || !activityType || !energyLevel) {
+        showError('Please complete all fields so I can guide you properly.');
+        return;
+      }
+
+      const activity = findBestActivity(activityType, location, time);
+      if (!activity) {
+        showError('I haven\'t learned your perfect combination yet. Try a nearby time or type.');
+        return;
+      }
+
+      activityData = {
+        ...activity,
+        time,
+        location,
+        type: activityType,
+        energyLevel
+      };
+
+      currentSessionData = {
+        type: activityType,
+        duration: time,
+        location,
+        energyLevel,
+        startTime: new Date(),
+        completed: false
+      };
+
+      // Track usage for adaptation
+      const userData = getUserData();
+      const usageKey = `${activityType}-${time}`;
+      userData.usage[usageKey] = (userData.usage[usageKey] || 0) + 1;
+      saveUserData(userData);
+
+      showScreen('activity-screen');
+      showActivity();
     }
 
-    function showDonation(){ alert('Thank you for supporting MindfulMoments. Options coming soon. Your usage refines how I adapt for you.'); }
+    function findBestActivity(type, location, time) {
+      if (activities[type] && activities[type][location]) {
+        const availableTimes = Object.keys(activities[type][location])
+          .map(Number)
+          .sort((a, b) => b - a);
+        
+        // Find the best matching time (closest but not exceeding requested time)
+        const chosenTime = availableTimes.find(t => t <= time) || availableTimes[availableTimes.length - 1];
+        return activities[type][location][chosenTime];
+      }
 
-    // Initialization
-    window.addEventListener('load',()=>{ updateStats(); renderQuickStarts(); if(speechSynth.onvoiceschanged!==undefined){ speechSynth.onvoiceschanged=()=>{}; } document.getElementById('volume-slider').addEventListener('input',e=>{ const u=getUserData(); u.preferences.volume=e.target.value; saveUserData(u); }); });
+      // Fallback for unsupported combinations
+      return {
+        title: 'Quick Reset',
+        intro: 'Let\'s take a mindful moment together.',
+        isMeditation: true,
+        focusPoint: 'Focus on your breath and be present.',
+        guidance: 'Take this time for yourself.',
+        voiceGuidance: ['Just settle in.', 'Feel your breath.', 'You\'re doing great.']
+      };
+    }
+
+    function showActivity() {
+      currentStep = 0;
+      
+      if (activityData.isMeditation) {
+        showMeditation();
+      } else if (activityData.isWriting) {
+        showWritingPrompts();
+      } else {
+        showSteps();
+      }
+    }
+
+    function showMeditation() {
+      const content = document.getElementById('activity-content');
+      content.innerHTML = `
+        <h2>${activityData.title}</h2>
+        <p class="intro-text">${activityData.intro}</p>
+        <div class="step active">
+          <h3>Get Ready</h3>
+          <p>${activityData.focusPoint}</p>
+          <p><strong>${activityData.guidance}</strong></p>
+        </div>
+      `;
+      
+      document.getElementById('start-timer-btn').style.display = 'block';
+      
+      if (audioEnabled) {
+        speak(`${activityData.intro} ${activityData.focusPoint}`);
+      }
+    }
+
+    function showWritingPrompts() {
+      const content = document.getElementById('activity-content');
+      let choicesHtml = '<div class="choices">';
+      
+      activityData.prompts.forEach((prompt, index) => {
+        choicesHtml += `
+          <div class="choice-btn" onclick="selectWritingPrompt(${index})" tabindex="0" role="button">
+            ${prompt}
+          </div>
+        `;
+      });
+      
+      choicesHtml += '</div>';
+      
+      content.innerHTML = `
+        <h2>${activityData.title}</h2>
+        <p class="intro-text">${activityData.intro}</p>
+        <div class="step active">
+          <h3>Choose Your Prompt</h3>
+          <p>Pick the one that speaks to you:</p>
+          ${choicesHtml}
+        </div>
+      `;
+      
+      // Add keyboard navigation for choice buttons
+      const choiceButtons = content.querySelectorAll('.choice-btn');
+      choiceButtons.forEach((btn, index) => {
+        btn.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectWritingPrompt(index);
+          }
+        };
+      });
+    }
+
+    function selectWritingPrompt(index) {
+      const content = document.getElementById('activity-content');
+      content.innerHTML = `
+        <h2>${activityData.title}</h2>
+        <div class="step active">
+          <h3>Your Prompt</h3>
+          <p><strong>"${activityData.prompts[index]}"</strong></p>
+          <p>I'll hold space while you write for ${activityData.time} minutes. Go ahead; I'll wait.</p>
+        </div>
+      `;
+      
+      document.getElementById('start-timer-btn').style.display = 'block';
+    }
+
+    function showSteps() {
+      totalSteps = activityData.steps.length;
+      const content = document.getElementById('activity-content');
+      
+      let stepsHtml = `
+        <h2>${activityData.title}</h2>
+        <p class="intro-text">${activityData.intro}</p>
+      `;
+      
+      activityData.steps.forEach((step, index) => {
+        stepsHtml += `
+          <div class="step" id="step-${index}">
+            <h3>Step ${index + 1} of ${totalSteps}</h3>
+            <p>${step}</p>
+          </div>
+        `;
+      });
+      
+      content.innerHTML = stepsHtml;
+      showCurrentStep();
+    }
+
+    function showCurrentStep() {
+      // Hide all steps
+      document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+      });
+      
+      const currentStepEl = document.getElementById(`step-${currentStep}`);
+      if (currentStepEl) {
+        currentStepEl.classList.add('active');
+        document.getElementById('next-btn').style.display = 'inline-block';
+        
+        if (audioEnabled && activityData.steps) {
+          speak(`Step ${currentStep + 1}. ${activityData.steps[currentStep]}`);
+        }
+        
+        updateProgress();
+      }
+    }
+
+    function nextStep() {
+      currentStep++;
+      if (currentStep >= totalSteps) {
+        showCompletion();
+      } else {
+        showCurrentStep();
+      }
+    }
+
+    function updateProgress(overridePercent) {
+      const progress = overridePercent !== undefined 
+        ? overridePercent 
+        : ((currentStep + 1) / totalSteps) * 100;
+      
+      const progressFill = document.getElementById('progress-fill');
+      if (progressFill) {
+        progressFill.style.width = `${progress}%`;
+      }
+    }
+
+    function showCompletion() {
+      const content = document.getElementById('activity-content');
+      content.innerHTML = `
+        <div class="step active">
+          <h2>🎉 Awesome Job!</h2>
+          <p>You've completed your ${activityData.title}! How do you feel? Remember: small consistent moments add up to something beautiful.</p>
+        </div>
+      `;
+      
+      document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('feedback-btn').style.display = 'inline-block';
+      updateProgress(100);
+      
+      currentSessionData.completed = true;
+      currentSessionData.endTime = new Date();
+      recordSession();
+      
+      if (audioEnabled) {
+        speak("You're doing something really special. Take a breath and check in with yourself.");
+      }
+    }
+
+    function startTimer() {
+      const totalSeconds = activityData.time * 60;
+      let remainingSeconds = totalSeconds;
+      let voiceGuidanceIndex = 0;
+      
+      document.getElementById('timer').style.display = 'block';
+      document.getElementById('start-timer-btn').style.display = 'none';
+      
+      // Initial voice guidance for meditation
+      if (activityData.isMeditation && audioEnabled && activityData.voiceGuidance) {
+        setTimeout(() => {
+          speak(activityData.voiceGuidance[0]);
+        }, 500);
+      }
+      
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = remainingSeconds % 60;
+        document.getElementById('timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+        
+        // Periodic voice guidance for meditation
+        if (activityData.isMeditation && audioEnabled && activityData.voiceGuidance) {
+          const elapsed = totalSeconds - remainingSeconds;
+          const interval = Math.floor(totalSeconds / activityData.voiceGuidance.length);
+          
+          if (elapsed > 0 && interval > 0 && elapsed % interval === 0 && 
+              voiceGuidanceIndex < activityData.voiceGuidance.length - 1) {
+            voiceGuidanceIndex++;
+            speak(activityData.voiceGuidance[voiceGuidanceIndex]);
+          }
+        }
+        
+        remainingSeconds--;
+        
+        if (remainingSeconds < 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          playCompletionSound();
+          document.getElementById('timer').textContent = "Time's up! 🎉";
+          
+          setTimeout(() => {
+            if (audioEnabled) {
+              const finishMessage = activityData.isWriting 
+                ? 'Great work—your creativity showed up today.'
+                : 'And there we are... you\'ve done something beautiful today.';
+              speak(finishMessage);
+            }
+            setTimeout(showCompletion, 1200);
+          }, 800);
+        }
+      }, 1000);
+    }
+
+    function recordSession() {
+      const userData = getUserData();
+      userData.sessions.push(currentSessionData);
+      userData.totalSessions++;
+      userData.totalMinutes += currentSessionData.duration;
+      
+      // Update streak
+      const today = new Date().toDateString();
+      if (userData.lastSessionDate !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        if (userData.lastSessionDate === yesterday.toDateString()) {
+          userData.currentStreak++;
+        } else {
+          userData.currentStreak = 1;
+        }
+        userData.lastSessionDate = today;
+      }
+      
+      saveUserData(userData);
+      updateStats();
+    }
+
+    function showFeedback() {
+      showScreen('feedback-screen');
+    }
+
+    function selectRating(category, value) {
+      selectedRatings[category] = value;
+      
+      const ratingButtons = document.querySelectorAll(`#${category}-rating .rating-btn`);
+      ratingButtons.forEach(button => {
+        const isSelected = button.getAttribute('data-value') === value;
+        button.classList.toggle('selected', isSelected);
+        button.setAttribute('aria-pressed', isSelected.toString());
+      });
+    }
+
+    function submitFeedback() {
+      const feedbackText = document.getElementById('feedback-text').value.trim();
+      
+      const feedback = {
+        sessionId: currentSessionData.startTime.getTime(),
+        mood: selectedRatings.mood,
+        difficulty: selectedRatings.difficulty,
+        text: feedbackText,
+        timestamp: new Date(),
+        activityType: currentSessionData.type,
+        duration: currentSessionData.duration
+      };
+      
+      const userData = getUserData();
+      userData.feedback.push(feedback);
+      saveUserData(userData);
+      
+      adaptNextActivityBasedOnFeedback(feedback);
+      
+      showSuccess('Thank you for your feedback! I\'ll use this to improve your future sessions.');
+      
+      if (audioEnabled) {
+        speak('Thank you. I learn from you, and I will tailor future suggestions.');
+      }
+      
+      setTimeout(goHome, audioEnabled ? 1500 : 500);
+    }
+
+    function adaptNextActivityBasedOnFeedback(feedback) {
+      const userData = getUserData();
+      
+      // Simple adaptation rules
+      if (feedback.difficulty === 'too-easy') {
+        const largerTime = Math.min(Math.ceil(feedback.duration * 1.3), 30);
+        userData.preferences[feedback.activityType] = userData.preferences[feedback.activityType] || {};
+        userData.preferences[feedback.activityType].lastSuggestedTime = largerTime;
+      }
+      
+      if (feedback.difficulty === 'too-hard') {
+        const smallerTime = Math.max(Math.floor(feedback.duration * 0.7), 1);
+        userData.preferences[feedback.activityType] = userData.preferences[feedback.activityType] || {};
+        userData.preferences[feedback.activityType].lastSuggestedTime = smallerTime;
+      }
+      
+      saveUserData(userData);
+    }
+
+    function playCompletionSound() {
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(528, audioContext.currentTime); // C5 note
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.1);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 2);
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 2);
+      } catch (error) {
+        console.error('Error playing completion sound:', error);
+        if (audioEnabled) {
+          speak('Session complete!');
+        }
+      }
+    }
+
+    function showDonation() {
+      alert('Thank you for supporting MindfulMoments! Your usage and feedback help refine how I adapt to better serve you. Support options coming soon.');
+    }
+
+    // ------------------ Event Listeners ------------------
+    function initializeEventListeners() {
+      // Audio toggle
+      const audioToggle = document.getElementById('audio-toggle');
+      if (audioToggle) {
+        audioToggle.addEventListener('click', toggleAudio);
+      }
+      
+      // Volume slider
+      const volumeSlider = document.getElementById('volume-slider');
+      if (volumeSlider) {
+        volumeSlider.addEventListener('input', (e) => {
+          const userData = getUserData();
+          userData.preferences.volume = e.target.value;
+          saveUserData(userData);
+        });
+      }
+      
+      // Rating buttons keyboard support
+      document.addEventListener('keydown', (e) => {
+        if (e.target.classList.contains('rating-btn') && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+      
+      // Form validation
+      const requiredSelects = document.querySelectorAll('select[aria-required="true"]');
+      requiredSelects.forEach(select => {
+        select.addEventListener('change', () => {
+          const errorMsg = document.getElementById('error-message');
+          if (errorMsg && errorMsg.style.display === 'block') {
+            errorMsg.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // ------------------ Initialization ------------------
+    function initialize() {
+      // Initialize speech synthesis
+      initializeSpeech();
+      
+      // Load user data and update UI
+      updateStats();
+      renderQuickStarts();
+      
+      // Set up event listeners
+      initializeEventListeners();
+      
+      // Load saved volume preference
+      const userData = getUserData();
+      if (userData.preferences.volume) {
+        const volumeSlider = document.getElementById('volume-slider');
+        if (volumeSlider) {
+          volumeSlider.value = userData.preferences.volume;
+        }
+      }
+      
+      // Handle speech synthesis voices loading
+      if (speechSynthesis && speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = () => {
+          // Voices are now loaded
+        };
+      }
+    }
+
+    // Initialize when DOM is loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+      initialize();
+    }
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+      stopSpeaking();
+    });
+
+    // Make functions available globally for onclick handlers
+    window.generateActivity = generateActivity;
+    window.nextStep = nextStep;
+    window.startTimer = startTimer;
+    window.showFeedback = showFeedback;
+    window.goHome = goHome;
+    window.selectRating = selectRating;
+    window.submitFeedback = submitFeedback;
+    window.testVoice = testVoice;
+    window.showDonation = showDonation;
+    window.selectWritingPrompt = selectWritingPrompt;
   </script>
 </body>
 </html>
