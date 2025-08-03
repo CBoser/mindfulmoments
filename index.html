@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindfulMoments - Adaptive Micro-Activity Guide</title>
+  <style>
+    /* Minimal refactor of original styling; still clean and friendly */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',system-ui,-apple-system; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .container{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-radius:18px;padding:2rem;max-width:550px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.08);}
+    .app-title{font-size:2.3rem;text-align:center;margin-bottom:.25rem;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .app-subtitle{font-size:.9rem;text-align:center;color:#555;margin-bottom:1rem;font-style:italic;}
+    .user-stats{background:linear-gradient(135deg,#667eea15,#764ba215);border-radius:10px;padding:1rem;margin-bottom:1.25rem;text-align:center;border:1px solid rgba(102,126,234,.18);}
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem;}
+    .stat-item{text-align:center;}
+    .stat-number{font-size:1.4rem;font-weight:700;color:#5f4bb6;}
+    .stat-label{font-size:.7rem;color:#444;margin-top:2px;}
+    .quick-start-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:1rem 0;}
+    .quick-start-btn{padding:12px;border:2px solid #e1e5e9;border-radius:8px;background:#fff;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px;font-size:.9rem;font-weight:600;}
+    .quick-start-btn:hover{border-color:#5648c8;background:rgba(102,126,234,.08);transform:translateY(-1px);}
+    .form-group{margin-bottom:1.25rem;}
+    label{display:block;margin-bottom:6px;color:#444;font-weight:600;font-size:.85rem;}
+    select,input,textarea{width:100%;padding:12px;border:2px solid #e1e5e9;border-radius:10px;font-size:1rem;transition:all .2s;border-radius:8px;background:#fff;}
+    select:focus,input:focus,textarea:focus{outline:none;border-color:#6f55d4;box-shadow:0 0 0 4px rgba(102,126,234,.1);}
+    button{width:100%;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:600;cursor:pointer;transition:all .25s;}
+    button:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(102,126,234,.25);}
+    .secondary-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:12px;cursor:pointer;}
+    .progress-bar{width:100%;height:8px;background:#e1e5e9;border-radius:4px;overflow:hidden;margin:1rem 0;}
+    .progress-fill{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);width:0%;transition:width .3s;}
+    .step{background:#f1f3f7;border-left:4px solid #667eea;padding:1rem;margin:1rem 0;border-radius:6px;display:none;}
+    .step.active{display:block;}
+    .timer{text-align:center;font-size:2rem;font-weight:700;color:#5f4bb6;margin:1rem 0;}
+    .choices{display:grid;gap:10px;margin:1rem 0;}
+    .choice-btn{padding:10px;background:#fff;border:2px solid #e1e5e9;border-radius:8px;cursor:pointer;transition:all .2s;text-align:left;}
+    .choice-btn:hover{border-color:#6f55d4;background:rgba(102,126,234,.08);}
+    .audio-controls{background:#f8f9fa;border-radius:10px;border:2px solid #e1e5e9;padding:1rem;margin:1rem 0;}
+    .audio-toggle{background:#28a745;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;margin:5px;font-size:.8rem;}
+    .audio-toggle.disable{background:#dc3545;}
+    .volume-slider{width:150px;margin:0 10px;}
+    .speaking-indicator{display:none;text-align:center;color:#5f4bb6;font-style:italic;margin:10px 0;}
+    .feedback-section{background:#f8f9fa;border-radius:10px;padding:1.5rem;margin:1rem 0;border:2px solid #e1e5e9;}
+    .rating-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0;}
+    .rating-btn{padding:8px 14px;border:2px solid #e1e5e9;border-radius:20px;background:#fff;cursor:pointer;transition:all .2s;font-size:.8rem;}
+    .rating-btn.selected{border-color:#6f55d4;background:rgba(102,126,234,.1);}
+    .intro-text{color:#555;line-height:1.5;margin-bottom:1rem;}
+    .donation-link{text-align:center;margin-top:1rem;padding:1rem;background:rgba(255,255,255,.75);border-radius:10px;border:1px solid #e1e5e9;font-size:.9rem;}
+    .donation-link a{color:#5f4bb6;font-weight:600;text-decoration:none;}
+  </style>
+</head>
+<body>
+  <div class="container" aria-label="MindfulMoments adaptive micro-activity guide">
+    <!-- Setup Screen -->
+    <div id="setup-screen">
+      <h1 class="app-title">MindfulMoments</h1>
+      <p class="app-subtitle">Your personal micro-activity guide — learns with you</p>
+      <div class="user-stats" aria-label="user progress summary">
+        <div><strong>Your Progress</strong></div>
+        <div class="stats-grid">
+          <div class="stat-item"><div class="stat-number" id="total-sessions">0</div><div class="stat-label">Sessions</div></div>
+          <div class="stat-item"><div class="stat-number" id="current-streak">0</div><div class="stat-label">Day Streak</div></div>
+          <div class="stat-item"><div class="stat-number" id="total-minutes">0</div><div class="stat-label">Minutes</div></div>
+        </div>
+      </div>
+
+      <div class="quick-start-grid" id="quick-starts">
+        <!-- Adaptive quick starts inserted here -->
+      </div>
+
+      <div class="form-group">
+        <label for="time">How much time do you have?</label>
+        <select id="time"><option value="">Select time...</option><option value="1">1 minute</option><option value="2">2 minutes</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option></select>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Where are you?</label>
+        <select id="location"><option value="">Select location...</option><option value="home">At home</option><option value="office">At the office</option><option value="outdoors">Outdoors</option><option value="gym">At the gym</option><option value="commuting">Commuting/traveling</option></select>
+      </div>
+
+      <div class="form-group">
+        <label for="activity-type">What type of activity?</label>
+        <select id="activity-type"><option value="">Select activity type...</option><option value="physical">Physical/Exercise 💪</option><option value="mental">Mental/Brain training 🧠</option><option value="creative">Creative/Writing ✍️</option><option value="relaxation">Relaxation/Meditation 🧘</option><option value="productivity">Productivity/Organization 📋</option></select>
+      </div>
+
+      <div class="form-group">
+        <label for="energy-level">How's your energy level?</label>
+        <select id="energy-level"><option value="">Select energy level...</option><option value="low">😴 Low - Need gentle activities</option><option value="moderate">😊 Moderate - Ready for anything</option><option value="high">⚡ High - Bring on the challenge!</option></select>
+      </div>
+
+      <div class="audio-controls">
+        <p><strong>🔊 Audio Features</strong></p>
+        <button class="audio-toggle" id="audio-toggle">Enable Voice Guidance</button>
+        <div style="margin:10px 0;"><label for="volume-slider">Volume: </label><input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="0.7"></div>
+        <p style="font-size:.75rem;color:#555;margin-top:4px;">Voice delivers warm, empathetic guidance like a real caring friend — adapts its phrasing so you don’t hear the same script twice.</p>
+        <button onclick="testVoice()" style="background:#17a2b8;width:auto;padding:8px 16px;margin:5px;font-size:.75rem;">Test Voice 🎵</button>
+      </div>
+
+      <button onclick="generateActivity()">Start My Activity! 🚀</button>
+      <div class="donation-link">
+        <p>Enjoying MindfulMoments? <a href="#" onclick="showDonation()">☕ Support the project</a></p>
+      </div>
+    </div>
+
+    <!-- Activity Screen -->
+    <div id="activity-screen" style="display:none;">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div id="activity-content"></div>
+      <div id="timer" class="timer" style="display:none;"></div>
+      <div id="speaking-indicator" class="speaking-indicator">🗣️ Speaking...</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+        <button id="next-btn" onclick="nextStep()" style="display:none;flex:1;">Ready! Next Step ➡️</button>
+        <button id="start-timer-btn" onclick="startTimer()" style="display:none;flex:1;">Start Timer ⏰</button>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:10px;">
+        <button onclick="showFeedback()" class="secondary-btn" style="flex:1;display:none;" id="feedback-btn">How was it? 💭</button>
+        <button onclick="goHome()" class="secondary-btn" style="flex:1;">Start Over 🔄</button>
+      </div>
+    </div>
+
+    <!-- Feedback Screen -->
+    <div id="feedback-screen" style="display:none;">
+      <div class="feedback-section">
+        <h2>How was your session? 💭</h2>
+        <div class="form-group">
+          <label>How did you feel?</label>
+          <div class="rating-buttons" id="mood-rating">
+            <div class="rating-btn" data-value="stressed" onclick="selectRating('mood','stressed')">😰 Stressed</div>
+            <div class="rating-btn" data-value="neutral" onclick="selectRating('mood','neutral')">😐 Neutral</div>
+            <div class="rating-btn" data-value="good" onclick="selectRating('mood','good')">😊 Good</div>
+            <div class="rating-btn" data-value="amazing" onclick="selectRating('mood','amazing')">🤩 Amazing</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>How was the difficulty?</label>
+          <div class="rating-buttons" id="difficulty-rating">
+            <div class="rating-btn" data-value="too-easy" onclick="selectRating('difficulty','too-easy')">Too Easy</div>
+            <div class="rating-btn" data-value="just-right" onclick="selectRating('difficulty','just-right')">Just Right</div>
+            <div class="rating-btn" data-value="too-hard" onclick="selectRating('difficulty','too-hard')">Too Hard</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Any thoughts or suggestions?</label>
+          <textarea id="feedback-text" rows="3" placeholder="Optional: What would make this better?"></textarea>
+        </div>
+        <button onclick="submitFeedback()">Submit Feedback ✨</button>
+        <button onclick="goHome()" class="secondary-btn">Start New Activity 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ------------------ Persistence & Learning ------------------
+    const USER_DATA_KEY = 'mindfulmoments_data';
+    function getUserData(){
+      const stored = localStorage.getItem(USER_DATA_KEY);
+      return stored ? JSON.parse(stored) : {totalSessions:0,totalMinutes:0,currentStreak:0,lastSessionDate:null,sessions:[],feedback:[],usage:{},preferences:{}};
+    }
+    function saveUserData(data){ localStorage.setItem(USER_DATA_KEY, JSON.stringify(data)); }
+    function updateStats(){ const u=getUserData(); document.getElementById('total-sessions').textContent=u.totalSessions; document.getElementById('current-streak').textContent=u.currentStreak; document.getElementById('total-minutes').textContent=u.totalMinutes; }
+
+    // ------------------ Adaptive Quick Starts ------------------
+    const baseQuickStarts = [
+      {label:'🧘 5min Meditation', type:'relaxation', time:5},
+      {label:'💪 10min Workout', type:'physical', time:10},
+      {label:'✍️ 5min Writing', type:'creative', time:5},
+      {label:'🧠 10min Brain Training', type:'mental', time:10}
+    ];
+
+    function adaptQuickStarts(){
+      const user = getUserData();
+      // Score activity types based on recent feedback and usage
+      const typeScore = {physical:0,relaxation:0,creative:0,mental:0};
+      user.feedback.slice(-10).forEach(f => {
+        if(f.activityType){
+          // if mood is stressed, boost relaxation
+          if(f.mood==='stressed' && f.activityType==='relaxation') typeScore.relaxation += 2;
+          if(f.mood==='good' || f.mood==='amazing') typeScore[f.activityType] += 1;
+          if(f.difficulty==='too-hard') typeScore[f.activityType] -= 1;
+          if(f.difficulty==='too-easy') typeScore[f.activityType] -= 0.5;
+        }
+      });
+      // Recent usage frequency
+      Object.entries(user.usage||{}).forEach(([key,count]) => { // key like 'physical-10'
+        const [atype, t] = key.split('-');
+        typeScore[atype] += Math.min(count * 0.1, 2); // diminishing returns
+      });
+      // Build sorted quick-starts with adapted priority
+      const sorted = [...baseQuickStarts].sort((a,b)=>{
+        const aScore = typeScore[a.type] || 0;
+        const bScore = typeScore[b.type] || 0;
+        return bScore - aScore;
+      });
+      return sorted;
+    }
+
+    function renderQuickStarts(){
+      const container=document.getElementById('quick-starts');
+      container.innerHTML='';
+      const adapted=adaptQuickStarts();
+      adapted.forEach(q=>{
+        const btn=document.createElement('div');
+        btn.className='quick-start-btn';
+        btn.textContent=q.label;
+        btn.onclick=()=>{ quickStart(q.type,q.time); };
+        container.appendChild(btn);
+      });
+    }
+
+    // ------------------ Voice & Tone ------------------
+    let audioEnabled=false;
+    const speechSynth=window.speechSynthesis;
+    function toggleAudio(){ audioEnabled=!audioEnabled; const tbtn=document.getElementById('audio-toggle'); if(audioEnabled){ tbtn.textContent='Disable Voice Guidance'; tbtn.classList.add('disable'); } else{ tbtn.textContent='Enable Voice Guidance'; tbtn.classList.remove('disable'); stopSpeaking(); }}
+    document.getElementById('audio-toggle').addEventListener('click',toggleAudio);
+
+    function makeTextNatural(text){
+      // simplified mapping to avoid over-repetition, pick random alternative when applicable
+      const replacements = [
+        {from:/Let\'s begin/g,to:"Let's gently begin, I'm here with you."},
+        {from:/Ready/g,to:"When you're ready, only when you're ready."},
+        {from:/Excellent/g,to:"That's just beautiful."},
+        {from:/Great job/g,to:"You're doing something really special."}
+      ];
+      let out=text;
+      replacements.forEach(r=>{ out=out.replace(r.from,r.to); });
+      return out;
+    }
+
+    function speak(text, callback){
+      if(!audioEnabled){ if(callback) callback(); return; }
+      stopSpeaking();
+      const utter=new SpeechSynthesisUtterance(makeTextNatural(text));
+      const voices=speechSynth.getVoices();
+      utter.rate=0.85; utter.pitch=0.9; utter.volume=parseFloat(document.getElementById('volume-slider').value);
+      // pick a friendly English voice if available
+      const preferred=['Alex','Google US English','Microsoft David Desktop'];
+      for(const name of preferred){ const v=voices.find(v=>v.name.includes(name)); if(v){ utter.voice=v; break; }}
+      document.getElementById('speaking-indicator').style.display='block';
+      utter.onend=()=>{ document.getElementById('speaking-indicator').style.display='none'; if(callback) callback(); };
+      utter.onerror=()=>{ document.getElementById('speaking-indicator').style.display='none'; if(callback) callback(); };
+      speechSynth.speak(utter);
+    }
+    function stopSpeaking(){ speechSynth.cancel(); document.getElementById('speaking-indicator').style.display='none'; }
+    function testVoice(){ if(!audioEnabled) toggleAudio(); speak('Hey friend, I see you. Let's take a moment just for you. Breathe... you are exactly where you need to be.'); }
+
+    // ------------------ Activity logic ------------------
+    let activityData={}; let currentSessionData={}; let currentStep=0; let totalSteps=0; let timerInterval=null; let selectedRatings={};
+    const activities={
+      physical:{home:{1:{title:'Quick Energizer',intro:'Just one minute to get your energy up!',steps:['Stand up and take 3 deep breaths','Do 5 jumping jacks','Hold a 15-second plank','Finish with arm circles and a stretch']},5:{title:'Mini Home Workout',intro:'Perfect! 5 minutes is ideal for a quick strength circuit.',steps:['Warm up: March in place for 30 seconds','Do 15 bodyweight squats','Hold a plank for 45 seconds','Do 10 push-ups (modify as needed)','Do 20 high knees','Cool down: Stretch your arms and legs for 1 minute']},10:{title:'Full Body Energizer',intro:'Excellent! 10 minutes gives us time for a complete mini-workout.',steps:['Warm up: Light stretching and arm circles (1 minute)','Circuit 1: 20 squats, 10 push-ups, 30-second plank','Rest 30s','Circuit 2: 15 lunges each leg, 20 mountain climbers','Rest 30s','Circuit 3: 10 burpees (or modified)','Cool down: Full body stretch (2 minutes)']}}},
+      relaxation:{home:{1:{title:'Quick Reset',intro:'A perfect 1-minute reset for your mind.',isMeditation:true,focusPoint:'Take slow, deep breaths and let go of any tension.',guidance:'One minute of mindful breathing to reset and refresh.',voiceGuidance:['Get settled. Breathe in gently... and out.','Notice how your body softens.','You are giving yourself this space, and that matters.']},5:{title:'Mini Meditation',intro:'Perfect! 5 minutes is ideal for a refreshing meditation session.',isMeditation:true,focusPoint:'Focus on your breath. Feel it move naturally.',guidance:'Let's settle together for 5 minutes.',voiceGuidance:['Welcome. Take a seat where you feel supported.','Feel the rise and fall of breath.','If the mind drifts, kindly bring it back.']}}},
+      creative:{home:{1:{title:'Flash Writing',intro:'Quick creative burst!',isWriting:true,prompts:['Write about the first thing you see right now','Describe your perfect morning in exactly 50 words','Write a tiny story that starts with \'Suddenly, everything changed...\'']},5:{title:'Quick Creative Writing',intro:'Let\'s spark your creativity!',isWriting:true,prompts:['Write about a world where colors have sounds','Describe a conversation between your past and future self','Tell the story of the last person on Earth finding a mysterious note']}}},
+      mental:{home:{10:{title:'Brain Training Session',intro:'Time to give your brain a workout!',steps:['Memory challenge: Look around and memorize 10 objects','Recall all 10 in order with eyes closed','Math warm-up: Backwards from 100 by 7s for 1 minute','Creative thinking: Name 10 unusual uses for a paperclip','Pattern recognition: Make a sequence and extend it','Reflection: Name 3 things you learned today']}}}
+    };
+
+    function showScreen(id){ document.querySelectorAll('#setup-screen,#activity-screen,#feedback-screen').forEach(el=>el.style.display='none'); document.getElementById(id).style.display='block'; }
+    function goHome(){ resetActivityState(); renderQuickStarts(); showScreen('setup-screen'); }
+    function resetActivityState(){ currentStep=0; if(timerInterval) clearInterval(timerInterval); stopSpeaking(); selectedRatings={}; document.getElementById('progress-fill').style.width='0%'; }
+
+    function quickStart(type,time){ document.getElementById('activity-type').value=type; document.getElementById('time').value=time; document.getElementById('location').value='home'; document.getElementById('energy-level').value='moderate'; generateActivity(); }
+
+    function generateActivity(){
+      const time=parseInt(document.getElementById('time').value,10);
+      const location=document.getElementById('location').value;
+      const activityType=document.getElementById('activity-type').value;
+      const energyLevel=document.getElementById('energy-level').value;
+      if(!time||!location||!activityType||!energyLevel){ alert('Please complete all fields so I can guide you properly.'); return; }
+      const activity=findBestActivity(activityType,location,time);
+      if(!activity){ alert('I haven\'t learned your perfect combination yet. Try a nearby time or type.'); return; }
+      activityData={...activity,time,location,type:activityType,energyLevel};
+      currentSessionData={type:activityType,duration:time,location,energyLevel,startTime:new Date(),completed:false};
+      // track usage for adaptation
+      const user=getUserData(); const key=activityType+'-'+time; user.usage[key]=(user.usage[key]||0)+1; saveUserData(user);
+      showScreen('activity-screen'); showActivity();
+    }
+
+    function findBestActivity(type,location,time){
+      if(activities[type] && activities[type][location]){
+        const avail=Object.keys(activities[type][location]).map(Number).sort((a,b)=>b-a);
+        const chosen=avail.find(t=>t<=time)||avail[avail.length-1];
+        return activities[type][location][chosen];
+      }
+      // fallback simple
+      return {title:'Quick Reset',intro:'Let\'s take a breath.',isMeditation:true,focusPoint:'Breathe slowly.',guidance:'Take a moment for yourself.',voiceGuidance:['Just settle in.','Feel your breath.']};
+    }
+
+    function showActivity(){ currentStep=0; if(activityData.isMeditation){ showMeditation(); } else if(activityData.isWriting){ showWritingPrompts(); } else{ showSteps(); } }
+    function showMeditation(){ const c=document.getElementById('activity-content'); c.innerHTML=`<h2>${activityData.title}</h2><p class="intro-text">${activityData.intro}</p><div class="step active"><h3>Get Ready</h3><p>${activityData.focusPoint}</p><p><strong>${activityData.guidance}</strong></p></div>`; document.getElementById('start-timer-btn').style.display='block'; if(audioEnabled){ speak(activityData.intro + ' ' + activityData.focusPoint); } }
+    function showWritingPrompts(){ const c=document.getElementById('activity-content'); let html='<div class="choices">'; activityData.prompts.forEach((p,i)=>{ html+=`<div class="choice-btn" onclick="selectWritingPrompt(${i})">${p}</div>`; }); html+='</div>'; c.innerHTML=`<h2>${activityData.title}</h2><p class="intro-text">${activityData.intro}</p><div class="step active"><h3>Choose Prompt</h3><p>Pick one that speaks to you:</p>${html}</div>`; }
+    function selectWritingPrompt(index){ const c=document.getElementById('activity-content'); c.innerHTML=`<h2>${activityData.title}</h2><div class="step active"><h3>Your Prompt</h3><p><strong>"${activityData.prompts[index]}"</strong></p><p>I'll hold space while you write for ${activityData.time} minutes. Go ahead; I'll wait.</p></div>`; document.getElementById('start-timer-btn').style.display='block'; }
+    function showSteps(){ totalSteps=activityData.steps.length; const c=document.getElementById('activity-content'); let html=`<h2>${activityData.title}</h2><p class="intro-text">${activityData.intro}</p>`; activityData.steps.forEach((s,i)=>{ html+=`<div class="step" id="step-${i}"><h3>Step ${i+1} of ${totalSteps}</h3><p>${s}</p></div>`; }); c.innerHTML=html; showCurrentStep(); }
+    function showCurrentStep(){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); const el=document.getElementById('step-'+currentStep); if(el){ el.classList.add('active'); document.getElementById('next-btn').style.display='inline-block'; if(audioEnabled && activityData.steps){ speak(`Step ${currentStep+1}. ${activityData.steps[currentStep]}`); } updateProgress(); } }
+    function nextStep(){ currentStep++; if(currentStep>=totalSteps){ showCompletion(); } else{ showCurrentStep(); } }
+    function updateProgress(override){ const progress=override!==undefined?override:((currentStep+1)/totalSteps)*100; document.getElementById('progress-fill').style.width=progress+'%'; }
+    function showCompletion(){ const c=document.getElementById('activity-content'); c.innerHTML=`<div class="step active"><h2>🎉 Awesome Job!</h2><p>You've completed your ${activityData.title}! How do you feel? Remember: small consistent moments add up.</p></div>`; document.getElementById('next-btn').style.display='none'; document.getElementById('feedback-btn').style.display='inline-block'; updateProgress(100); currentSessionData.completed=true; currentSessionData.endTime=new Date(); recordSession(); if(audioEnabled){ speak("You're doing something really special. Take a breath and check in with yourself."); } }
+    function startTimer(){ const total=activityData.time*60; let remaining=total; let voiceIndex=0; document.getElementById('timer').style.display='block'; document.getElementById('start-timer-btn').style.display='none'; if(activityData.isMeditation && audioEnabled && activityData.voiceGuidance){ setTimeout(()=>speak(activityData.voiceGuidance[0]),500); }
+      timerInterval=setInterval(()=>{ const mins=Math.floor(remaining/60); const secs=remaining%60; document.getElementById('timer').textContent=`${mins}:${String(secs).padStart(2,'0')}`; // guidance spaced evenly
+        if(activityData.isMeditation && audioEnabled && activityData.voiceGuidance){ const totalTime=total; const elapsed=total-remaining; const interval=Math.floor(totalTime/activityData.voiceGuidance.length); if(elapsed>0 && interval>0 && elapsed%interval===0 && voiceIndex<activityData.voiceGuidance.length-1){ voiceIndex++; speak(activityData.voiceGuidance[voiceIndex]); } }
+        remaining--; if(remaining<0){ clearInterval(timerInterval); playBell(); document.getElementById('timer').textContent="Time's up! 🎉"; setTimeout(()=>{ if(audioEnabled){ let finishMsg='And there we are... you've done something beautiful today.'; if(activityData.isWriting) finishMsg='Great work—your creativity showed up.'; speak(finishMsg); } setTimeout(showCompletion,1200); },800); } },1000);
+    }
+    function recordSession(){ const user=getUserData(); user.sessions.push(currentSessionData); user.totalSessions++; user.totalMinutes+=currentSessionData.duration; const today=new Date().toDateString(); if(user.lastSessionDate!==today){ const yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1); if(user.lastSessionDate===yesterday.toDateString()){ user.currentStreak++; } else{ user.currentStreak=1; } user.lastSessionDate=today; } saveUserData(user); updateStats(); }
+    function showFeedback(){ showScreen('feedback-screen'); }
+    function selectRating(cat,val){ selectedRatings[cat]=val; document.querySelectorAll(`#${cat}-rating .rating-btn`).forEach(b=>{ b.classList.toggle('selected', b.getAttribute('data-value')===val); }); }
+    function submitFeedback(){ const text=document.getElementById('feedback-text').value; const feedback={sessionId:currentSessionData.startTime.getTime(),mood:selectedRatings.mood,difficulty:selectedRatings.difficulty,text, timestamp:new Date(),activityType:currentSessionData.type,duration:currentSessionData.duration}; const user=getUserData(); user.feedback.push(feedback;); saveUserData(user); adaptNextActivityBasedOnFeedback(feedback); if(audioEnabled){ speak('Thank you. I learn from you, and I will tailor future suggestions.'); } setTimeout(goHome,audioEnabled?1500:500); }
+    // Adapt difficulty/next suggestion based on last feedback
+    function adaptNextActivityBasedOnFeedback(feedback){ const user=getUserData(); // simple rule: if too easy, bump similar future time up 30%; if too hard, reduce by 30%
+      if(feedback.difficulty==='too-easy'){ const key=feedback.activityType + '-' + feedback.duration; const larger = Math.min(Math.ceil(feedback.duration * 1.3), 30); user.preferences[feedback.activityType]=user.preferences[feedback.activityType]||{}; user.preferences[feedback.activityType].lastSuggestedTime=larger; }
+      if(feedback.difficulty==='too-hard'){ const smaller = Math.max(Math.floor(feedback.duration * 0.7),1); user.preferences[feedback.activityType]=user.preferences[feedback.activityType]||{}; user.preferences[feedback.activityType].lastSuggestedTime=smaller; }
+      saveUserData(user);
+    }
+
+    function playBell(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.frequency.setValueAtTime(528,ctx.currentTime); osc.type='sine'; gain.gain.setValueAtTime(0,ctx.currentTime); gain.gain.linearRampToValueAtTime(0.15,ctx.currentTime+.1); gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+2); osc.start(); osc.stop(ctx.currentTime+2); }catch(e){ if(audioEnabled) speak('Session complete!'); }
+    }
+
+    function showDonation(){ alert('Thank you for supporting MindfulMoments. Options coming soon. Your usage refines how I adapt for you.'); }
+
+    // Initialization
+    window.addEventListener('load',()=>{ updateStats(); renderQuickStarts(); if(speechSynth.onvoiceschanged!==undefined){ speechSynth.onvoiceschanged=()=>{}; } document.getElementById('volume-slider').addEventListener('input',e=>{ const u=getUserData(); u.preferences.volume=e.target.value; saveUserData(u); }); });
+  </script>
+</body>
+</html>
